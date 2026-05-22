@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>$CAPYONSOL — He's Got This</title>
+<meta name="description" content="$CAPYONSOL is the chillest capybara on Solana. He doesn't panic. He doesn't sell. He holds." />
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/capy-pfp.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/capy-pfp.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
+<meta property="og:title" content="$CAPYONSOL — He's Got This" />
+<meta property="og:description" content="The chillest capybara on Solana. Built different. Built to hold." />
+<meta property="og:image" content="assets/capy-cosmic.png" />
+<meta property="og:url" content="https://capyonsolana.com" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@capyonsolcoin" />
+<meta name="twitter:title" content="$CAPYONSOL — He's Got This" />
+<meta name="twitter:description" content="The chillest capybara on Solana. He doesn't panic. He doesn't sell. He holds." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+:root {
+  --capy-purple: #9945FF;
+  --capy-green: #14F195;
+  --capy-purple-dim: #6b2cc7;
+  --bg-black: #050309;
+  --bg-deep: #0a0613;
+  --bg-card: #110a1f;
+  --text-white: #f5f0ff;
+  --text-mute: #8a7da3;
+  --grad-brand: linear-gradient(135deg, #9945FF 0%, #14F195 100%);
+  --grad-brand-soft: linear-gradient(135deg, rgba(153,69,255,0.15) 0%, rgba(20,241,149,0.15) 100%);
+  --grad-radial: radial-gradient(circle at 30% 50%, rgba(153,69,255,0.25), transparent 60%),
+                 radial-gradient(circle at 70% 50%, rgba(20,241,149,0.18), transparent 60%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg-black);
+  color: var(--text-white);
+  font-family: 'Manrope', sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+::selection { background: var(--capy-green); color: var(--bg-black); }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-black); }
+::-webkit-scrollbar-thumb { background: var(--capy-purple-dim); border-radius: 4px; }
+
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 18px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(5, 3, 9, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(153, 69, 255, 0.08);
+  transition: all 0.4s ease;
+}
+.nav__logo {
+  height: 32px;
+  width: auto;
+  filter: drop-shadow(0 0 16px rgba(153,69,255,0.5));
+  display: block;
+}
+.nav__links { display: flex; gap: 36px; list-style: none; }
+.nav__links a {
+  color: var(--text-mute);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  transition: color 0.3s;
+}
+.nav__links a:hover { color: var(--capy-green); }
+.nav__cta {
+  background: var(--grad-brand);
+  border: none;
+  color: white;
+  padding: 11px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+.nav__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(20, 241, 149, 0.4);
+}
+@media (max-width: 768px) {
+  .nav { padding: 14px 20px; }
+  .nav__links { display: none; }
+}
+
+.hero {
+  height: 100vh;
+  min-height: 720px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(5,3,9,0.55) 0%, rgba(5,3,9,0.75) 60%, var(--bg-black) 100%);
+  z-index: 2;
+}
+.hero__overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5,3,9,0.7) 0%, rgba(5,3,9,0.4) 30%, rgba(5,3,9,0.4) 65%, var(--bg-black) 100%);
+}
+.hero__content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  max-width: 1200px;
+  padding: 0 40px;
+}
+.hero__eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.35em;
+  color: var(--capy-green);
+  margin-bottom: 28px;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.4s forwards;
+}
+.hero__eyebrow span { color: var(--text-mute); margin: 0 12px; }
+.hero__title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(64px, 11vw, 180px);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  margin-bottom: 32px;
+  text-shadow: 0 4px 40px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  animation: fadeUp 1.2s 0.7s forwards;
+}
+.hero__title .grad {
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero__title .italic {
+  font-style: italic;
+  font-weight: 500;
+  display: block;
+  font-size: 0.55em;
+  color: var(--text-mute);
+  letter-spacing: -0.02em;
+  margin-top: 8px;
+}
+.hero__sub {
+  font-size: clamp(17px, 1.5vw, 20px);
+  color: rgba(245, 240, 255, 0.92);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  font-weight: 500;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  animation: fadeUp 1s 1.1s forwards;
+}
+.hero__ctas {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 1s 1.4s forwards;
+}
+.btn {
+  padding: 16px 32px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  font-family: 'Manrope', sans-serif;
+}
+.btn--primary { background: var(--grad-brand); color: white; }
+.btn--primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 50px rgba(153, 69, 255, 0.5);
+}
+.btn--ghost {
+  background: rgba(255,255,255,0.03);
+  color: var(--text-white);
+  border: 1px solid rgba(245,240,255,0.15);
+  backdrop-filter: blur(10px);
+}
+.btn--ghost:hover { border-color: var(--capy-green); color: var(--capy-green); }
+
+.hero__scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeUp 1s 1.8s forwards;
+}
+.hero__scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, var(--capy-green));
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.7); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+.ticker {
+  background: var(--bg-deep);
+  border-top: 1px solid rgba(153,69,255,0.15);
+  border-bottom: 1px solid rgba(153,69,255,0.15);
+  padding: 24px 0;
+  overflow: hidden;
+  position: relative;
+}
+.ticker__track {
+  display: flex;
+  gap: 80px;
+  animation: scrollTicker 40s linear infinite;
+  white-space: nowrap;
+  width: max-content;
+}
+.ticker__item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ticker__item .dot {
+  width: 6px; height: 6px;
+  background: var(--capy-green);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--capy-green);
+}
+.ticker__item strong { color: var(--text-white); font-weight: 700; }
+@keyframes scrollTicker { to { transform: translateX(-50%); } }
+
+section { position: relative; }
+.container { max-width: 1280px; margin: 0 auto; }
+.section__label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--capy-green);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section__label::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--capy-green);
+}
+.section__title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(40px, 6vw, 90px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  margin-bottom: 32px;
+}
+.section__title .grad {
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.section__title .italic { font-style: italic; font-weight: 500; color: var(--text-mute); }
+.section__lead {
+  font-size: clamp(17px, 1.5vw, 21px);
+  color: var(--text-mute);
+  max-width: 640px;
+  line-height: 1.6;
+}
+
+.origin {
+  padding: 160px 40px;
+  background: var(--bg-black);
+  position: relative;
+  overflow: hidden;
+}
+.origin__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/capy-cosmic.png');
+  background-size: cover;
+  background-position: center;
+  filter: blur(8px) brightness(0.3);
+  opacity: 0.4;
+  transform: scale(1.1);
+}
+.origin__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+.origin__visual {
+  position: relative;
+  aspect-ratio: 1/1;
+}
+.origin__visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 30px 80px rgba(153,69,255,0.4));
+}
+.origin__visual-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(153,69,255,0.4), transparent 60%);
+  filter: blur(60px);
+  z-index: -1;
+  animation: pulse 4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+.origin__quote {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-style: italic;
+  font-size: clamp(22px, 2vw, 28px);
+  color: var(--text-white);
+  margin: 32px 0;
+  padding-left: 24px;
+  border-left: 2px solid var(--capy-green);
+  line-height: 1.4;
+}
+@media (max-width: 900px) {
+  .origin__grid { grid-template-columns: 1fr; gap: 60px; }
+  .origin__visual { max-width: 400px; margin: 0 auto; }
+}
+
+.manifesto {
+  padding: 160px 40px;
+  background: linear-gradient(180deg, var(--bg-black) 0%, var(--bg-deep) 50%, var(--bg-black) 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.manifesto::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--grad-radial);
+  opacity: 0.5;
+}
+.manifesto__title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(48px, 9vw, 140px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  margin: 0 auto;
+  max-width: 1100px;
+  position: relative;
+  z-index: 2;
+}
+.manifesto__line {
+  display: block;
+  opacity: 0;
+  transform: translateY(60px);
+}
+.manifesto__line.grad {
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.manifesto__line.italic { font-style: italic; font-weight: 500; color: var(--text-mute); }
+.manifesto__footer {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  margin-top: 80px;
+  position: relative;
+  z-index: 2;
+}
+
+.pillars {
+  padding: 140px 40px;
+  background: var(--bg-black);
+}
+.pillars__header { text-align: center; margin-bottom: 80px; }
+.pillars__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.pillar {
+  background: var(--bg-card);
+  border: 1px solid rgba(153,69,255,0.12);
+  border-radius: 24px;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  display: flex;
+  flex-direction: column;
+}
+.pillar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--grad-brand-soft);
+  opacity: 0;
+  transition: opacity 0.4s;
+  z-index: 1;
+}
+.pillar:hover { border-color: rgba(20,241,149,0.3); transform: translateY(-6px); }
+.pillar:hover::before { opacity: 1; }
+.pillar > * { position: relative; z-index: 2; }
+.pillar__image {
+  width: 100%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  position: relative;
+}
+.pillar__image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, var(--bg-card) 100%);
+  z-index: 2;
+}
+.pillar__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  transition: transform 0.6s ease;
+}
+.pillar:hover .pillar__image img { transform: scale(1.05); }
+.pillar__body {
+  padding: 8px 32px 40px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.pillar__num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--capy-green);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.pillar__title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+.pillar__desc {
+  color: var(--text-mute);
+  font-size: 15px;
+  line-height: 1.65;
+  flex-grow: 1;
+}
+.pillar__tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-mute);
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(153,69,255,0.1);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+@media (max-width: 900px) { .pillars__grid { grid-template-columns: 1fr; } }
+
+.roadmap {
+  padding: 160px 40px;
+  background: linear-gradient(180deg, var(--bg-black) 0%, var(--bg-deep) 100%);
+}
+.roadmap__chapters {
+  margin-top: 80px;
+  display: grid;
+  gap: 24px;
+}
+.chapter {
+  display: grid;
+  grid-template-columns: 220px 1fr auto;
+  gap: 40px;
+  padding: 32px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(153,69,255,0.1);
+  border-radius: 20px;
+  align-items: center;
+  transition: all 0.4s ease;
+}
+.chapter:hover { border-color: rgba(20,241,149,0.3); background: rgba(255,255,255,0.04); }
+.chapter__phase {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--capy-green);
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.chapter__phase strong {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 32px;
+  color: var(--text-white);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.chapter__content h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+.chapter__content p { color: var(--text-mute); font-size: 15px; }
+.chapter__status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  padding: 8px 16px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.chapter__status.live {
+  background: rgba(20,241,149,0.12);
+  color: var(--capy-green);
+  border: 1px solid rgba(20,241,149,0.3);
+}
+.chapter__status.soon {
+  background: rgba(153,69,255,0.12);
+  color: var(--capy-purple);
+  border: 1px solid rgba(153,69,255,0.3);
+}
+.chapter__status.dream {
+  background: rgba(255,255,255,0.04);
+  color: var(--text-mute);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+@media (max-width: 768px) {
+  .chapter { grid-template-columns: 1fr; gap: 16px; }
+  .chapter__status { justify-self: start; }
+}
+
+.tribe {
+  padding: 160px 40px;
+  background: var(--bg-black);
+  overflow: hidden;
+}
+.tribe__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.tribe__visual {
+  position: relative;
+  aspect-ratio: 1/1;
+  max-width: 480px;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(20,241,149,0.2);
+}
+.tribe__visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.tribe__visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, transparent 60%, rgba(20,241,149,0.08) 100%);
+  pointer-events: none;
+}
+.tribe__socials {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 40px;
+}
+.social-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(153,69,255,0.12);
+  border-radius: 16px;
+  padding: 24px;
+  text-decoration: none;
+  color: var(--text-white);
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.social-card:hover { border-color: var(--capy-green); transform: translateY(-4px); }
+.social-card__platform {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--capy-green);
+  text-transform: uppercase;
+}
+.social-card__handle {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.social-card__meta { font-size: 13px; color: var(--text-mute); margin-top: 4px; }
+@media (max-width: 900px) {
+  .tribe__inner { grid-template-columns: 1fr; gap: 60px; }
+  .tribe__visual { margin: 0 auto; }
+}
+
+.final {
+  padding: 180px 40px;
+  text-align: center;
+  background: linear-gradient(180deg, var(--bg-black) 0%, var(--bg-deep) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.final::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--grad-radial);
+  opacity: 0.6;
+}
+.final__inner { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; }
+.final__title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(56px, 10vw, 160px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  margin-bottom: 40px;
+}
+.final__title .grad {
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.final__sub {
+  font-size: clamp(17px, 1.5vw, 20px);
+  color: var(--text-mute);
+  margin-bottom: 56px;
+  max-width: 540px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer {
+  padding: 60px 40px 40px;
+  background: var(--bg-black);
+  border-top: 1px solid rgba(153,69,255,0.1);
+}
+.footer__top {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 32px;
+  padding-bottom: 40px;
+}
+.footer__logo img { height: 32px; }
+.footer__meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-mute);
+  letter-spacing: 0.15em;
+}
+.footer__disclaimer {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  text-align: center;
+  padding-top: 32px;
+  border-top: 1px solid rgba(153,69,255,0.08);
+  max-width: 1280px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+.footer__disclaimer strong { color: var(--capy-green); }
+
+.reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 768px) {
+  .origin, .manifesto, .pillars, .roadmap, .tribe, .final {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 100px;
+    padding-bottom: 100px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#"><img src="assets/logo.png" alt="$CAPY" class="nav__logo"></a>
+  <ul class="nav__links">
+    <li><a href="#origin">Origin</a></li>
+    <li><a href="#manifesto">Manifesto</a></li>
+    <li><a href="#pillars">Pillars</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#tribe">Tribe</a></li>
+  </ul>
+  <a href="#tribe" class="nav__cta">Join the tribe</a>
+</nav>
+
+<section class="hero">
+  <video class="hero__video" autoplay muted loop playsinline>
+    <source src="assets/videos/scene1-discovery.mp4" type="video/mp4">
+  </video>
+  <div class="hero__overlay"></div>
+  <div class="hero__content">
+    <div class="hero__eyebrow">A Solana memecoin <span>//</span> Powered by chill</div>
+    <h1 class="hero__title">
+      He's <span class="grad">got this.</span>
+      <span class="italic">— and so do you.</span>
+    </h1>
+    <p class="hero__sub">$CAPYONSOL is the chillest capybara on Solana. He doesn't panic. He doesn't sell. He holds — and somehow, that's the whole strategy.</p>
+    <div class="hero__ctas">
+      <a href="#origin" class="btn btn--primary">Read the lore →</a>
+      <a href="#tribe" class="btn btn--ghost">Join the tribe</a>
+    </div>
+  </div>
+  <div class="hero__scroll">
+    <span>Scroll the story</span>
+    <div class="hero__scroll-line"></div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker__track">
+    <div class="ticker__item"><span class="dot"></span> Ticker: <strong>$CAPYONSOL</strong></div>
+    <div class="ticker__item"><span class="dot"></span> Chain: <strong>Solana</strong></div>
+    <div class="ticker__item"><span class="dot"></span> Vibe: <strong>Chill maximalism</strong></div>
+    <div class="ticker__item"><span class="dot"></span> Status: <strong>Pre-launch</strong></div>
+    <div class="ticker__item"><span class="dot"></span> Site: <strong>capyonsolana.com</strong></div>
+    <div class="ticker__item"><span class="dot"></span> X: <strong>@capyonsolcoin</strong></div>
+    <div class="ticker__item"><span class="dot"></span> Utility: <strong>You hold. He holds.</strong></div>
+    <div class="ticker__item"><span class="dot"></span> Ticker: <strong>$CAPYONSOL</strong></div>
+    <div class="ticker__item"><span class="dot"></span> Chain: <strong>Solana</strong></div>
+    <div class="ticker__item"><span class="dot"></span> Vibe: <strong>Chill maximalism</strong></div>
+    <div class="ticker__item"><span class="dot"></span> Status: <strong>Pre-launch</strong></div>
+    <div class="ticker__item"><span class="dot"></span> Site: <strong>capyonsolana.com</strong></div>
+    <div class="ticker__item"><span class="dot"></span> X: <strong>@capyonsolcoin</strong></div>
+    <div class="ticker__item"><span class="dot"></span> Utility: <strong>You hold. He holds.</strong></div>
+  </div>
+</div>
+
+<section class="origin" id="origin">
+  <div class="origin__bg"></div>
+  <div class="container">
+    <div class="origin__grid">
+      <div class="origin__visual reveal">
+        <div class="origin__visual-glow"></div>
+        <img src="assets/capy-hero.png" alt="The Capybara">
+      </div>
+      <div class="reveal">
+        <div class="section__label">Chapter One — The Discovery</div>
+        <h2 class="section__title">A coin found <span class="grad">a capybara</span>.</h2>
+        <p class="section__lead">Most coins find a founder. Then a roadmap. Then a Discord that gets rugged in six weeks. This one found a capybara floating somewhere between two galaxies, holding nothing, waiting for nothing, slightly amused by everything.</p>
+        <blockquote class="origin__quote">"He looked at the coin. The coin looked at him. Neither of them blinked. That's how the chillest token on Solana was born."</blockquote>
+        <p class="section__lead">No VC. No private sale. No insider allocation waiting to dump on you. Just a capybara, a Solana coin, and the dumb idea that maybe — just maybe — being calm is the alpha.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="manifesto" id="manifesto">
+  <h2 class="manifesto__title">
+    <span class="manifesto__line">We don't panic.</span>
+    <span class="manifesto__line italic">We don't sell.</span>
+    <span class="manifesto__line grad">We hold.</span>
+  </h2>
+  <p class="manifesto__footer">— The $CAPYONSOL manifesto, all of it</p>
+</section>
+
+<section class="pillars" id="pillars">
+  <div class="container">
+    <div class="pillars__header reveal">
+      <div class="section__label" style="justify-content:center;">The Three Pillars</div>
+      <h2 class="section__title">Built different. <span class="italic">Built to hold.</span></h2>
+    </div>
+    <div class="pillars__grid">
+      <div class="pillar reveal">
+        <div class="pillar__image"><img src="assets/pillar1-diamond.jpeg" alt="Capybara holding glowing Solana coin"></div>
+        <div class="pillar__body">
+          <div class="pillar__num">01 — Diamond Paws</div>
+          <h3 class="pillar__title">Holding is the strategy.</h3>
+          <p class="pillar__desc">No presale. No insider deals. The capybara holds his coin. You hold yours. That's the technology.</p>
+          <div class="pillar__tag">// Chill conviction</div>
+        </div>
+      </div>
+      <div class="pillar reveal">
+        <div class="pillar__image"><img src="assets/pillar2-building.jpeg" alt="Capybara coding on a laptop"></div>
+        <div class="pillar__body">
+          <div class="pillar__num">02 — Always Building</div>
+          <h3 class="pillar__title">Memes today. More tomorrow.</h3>
+          <p class="pillar__desc">Behind the chill vibes, the capybara is on his laptop at 3am. Memes, art, lore, tools — drip-fed, never promised. Underpromise, overship.</p>
+          <div class="pillar__tag">// Quiet builder energy</div>
+        </div>
+      </div>
+      <div class="pillar reveal">
+        <div class="pillar__image"><img src="assets/pillar3-ready.jpeg" alt="Capybara with adventure backpack"></div>
+        <div class="pillar__body">
+          <div class="pillar__num">03 — Ready For Anything</div>
+          <h3 class="pillar__title">Bear market? Still chilling.</h3>
+          <p class="pillar__desc">Bull, bear, sideways, sideways with extra steps — the capybara packs the same backpack every morning. Stress is a choice. We didn't choose it.</p>
+          <div class="pillar__tag">// Built for the long way</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="roadmap" id="roadmap">
+  <div class="container">
+    <div class="reveal" style="text-align:center; max-width:760px; margin:0 auto;">
+      <div class="section__label" style="justify-content:center;">The Journey</div>
+      <h2 class="section__title">A roadmap, <span class="italic">but chill.</span></h2>
+      <p class="section__lead" style="margin: 0 auto;">No promises of Lamborghinis. No "Q3 partnership with Apple." Just the next few honest chapters. We'll cross the rest of the galaxy when we get to it.</p>
+    </div>
+
+    <div class="roadmap__chapters">
+      <div class="chapter reveal">
+        <div class="chapter__phase"><span>Chapter 01</span><strong>Lore Era</strong></div>
+        <div class="chapter__content">
+          <h3>Build the character, not the chart.</h3>
+          <p>Daily memes. Character art. Lore drops on X. Grow a community that actually likes the capybara before any coin exists.</p>
+        </div>
+        <span class="chapter__status live">● In Progress</span>
+      </div>
+
+      <div class="chapter reveal">
+        <div class="chapter__phase"><span>Chapter 02</span><strong>The Launch</strong></div>
+        <div class="chapter__content">
+          <h3>Fair launch on Solana. No presale.</h3>
+          <p>When the tribe is ready, $CAPYONSOL launches on pump.fun. Fair launch. Locked liquidity. No presale. No private rounds. Everyone gets in at the same price.</p>
+        </div>
+        <span class="chapter__status soon">○ Coming Soon</span>
+      </div>
+
+      <div class="chapter reveal">
+        <div class="chapter__phase"><span>Chapter 03</span><strong>Tribe Tools</strong></div>
+        <div class="chapter__content">
+          <h3>Sticker packs, PFPs, mini-games.</h3>
+          <p>Free tools for holders. A Telegram sticker pack. A PFP generator. A dumb little browser game where the capybara holds harder when you click. The point is to make holding fun.</p>
+        </div>
+        <span class="chapter__status dream">◌ Plotting</span>
+      </div>
+
+      <div class="chapter reveal">
+        <div class="chapter__phase"><span>Chapter 04</span><strong>???</strong></div>
+        <div class="chapter__content">
+          <h3>We'll know when we get there.</h3>
+          <p>The capybara has never planned more than three chapters ahead. He doesn't even know what month it is. That's the whole vibe.</p>
+        </div>
+        <span class="chapter__status dream">◌ Vibes only</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tribe" id="tribe">
+  <div class="container">
+    <div class="tribe__inner">
+      <div class="tribe__visual reveal">
+        <img src="assets/capy-coin-hold.jpeg" alt="Join the tribe">
+      </div>
+      <div class="reveal">
+        <div class="section__label">The Tribe</div>
+        <h2 class="section__title">Join the <span class="grad">capybaras.</span></h2>
+        <p class="section__lead">Pre-launch. No token yet. No promises. Just a growing tribe of people who think being chill might actually be the alpha. If that's you — get in early.</p>
+        <div class="tribe__socials">
+          <a href="https://x.com/capyonsolcoin" target="_blank" rel="noopener" class="social-card">
+            <span class="social-card__platform">X / Twitter</span>
+            <span class="social-card__handle">@capyonsolcoin</span>
+            <span class="social-card__meta">Daily capy. Always chill. Follow for launch updates.</span>
+          </a>
+          <div class="social-card" style="opacity:0.5; cursor:default;">
+            <span class="social-card__platform">Telegram</span>
+            <span class="social-card__handle">Coming soon</span>
+            <span class="social-card__meta">Community lounge launching when the tribe is ready.</span>
+          </div>
+          <div class="social-card" style="opacity:0.5; cursor:default;">
+            <span class="social-card__platform">Discord</span>
+            <span class="social-card__handle">Coming soon</span>
+            <span class="social-card__meta">For the lore people. Launching post-token.</span>
+          </div>
+          <a href="mailto:capyoonsol@gmail.com" class="social-card">
+            <span class="social-card__platform">Email</span>
+            <span class="social-card__handle">Get in touch</span>
+            <span class="social-card__meta">Collabs, partnerships, press inquiries.</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="final__inner">
+    <h2 class="final__title">He's <span class="grad">got this.</span></h2>
+    <p class="final__sub">The chillest capybara on Solana is waiting. Come hold with him.</p>
+    <a href="#tribe" class="btn btn--primary">Join the tribe →</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__top">
+    <a href="#" class="footer__logo"><img src="assets/logo.png" alt="$CAPY"></a>
+    <div class="footer__meta">© 2026 $CAPYONSOL · capyonsolana.com · Made with chill</div>
+  </div>
+  <div class="footer__disclaimer">
+    <strong>Disclaimer:</strong> $CAPYONSOL is a memecoin. It has no intrinsic value, no expectation of financial return, and exists for entertainment and community purposes only. This is not financial advice. Cryptocurrencies are highly volatile and you can lose your entire investment. Do your own research. The capybara is not responsible for your portfolio.
+  </div>
+</footer>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  const reveals = document.querySelectorAll('.reveal');
+  reveals.forEach(el => {
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 85%',
+      onEnter: () => el.classList.add('visible'),
+    });
+  });
+
+  gsap.to('.manifesto__line', {
+    opacity: 1,
+    y: 0,
+    stagger: 0.25,
+    duration: 1,
+    ease: 'power3.out',
+    scrollTrigger: { trigger: '.manifesto', start: 'top 60%' }
+  });
+
+  gsap.to('.hero__video', {
+    yPercent: 20,
+    scale: 1.05,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true,
+    }
+  });
+
+  gsap.to('.origin__visual img', {
+    yPercent: -10,
+    rotation: 5,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.origin',
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: true,
+    }
+  });
+
+  gsap.to('.tribe__visual img', {
+    scale: 1.08,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.tribe',
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: true,
+    }
+  });
+</script>
+
+</body>
+</html>
