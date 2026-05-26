@@ -1554,46 +1554,43 @@ input[type=range].ms-range::-webkit-slider-thumb {
 <script>
 // ── MEME STUDIO JS ──
 (function(){
-  var src = null, locked = false, gallery = [];
+  var mascotImg = null;
+  var gallery = [];
   var caps = true, shadow = true;
   var textColor = '#FFFFFF', strokeColor = '#000000';
   var canvas = null;
 
-  var TEXT_COLORS  = ['#FFFFFF','#FFFF00','#FF3B3B','#00FF88','#00CFFF','#FF9500','#FF69B4','#000000'];
+  var TEXT_COLORS   = ['#FFFFFF','#FFFF00','#FF3B3B','#00FF88','#00CFFF','#FF9500','#FF69B4','#000000'];
   var STROKE_COLORS = ['#000000','#FFFFFF','#9945FF','#14F195','transparent'];
   var PRESETS = [
-    { label:'Classic Meme',     top:'WHEN YOU',          bottom:'CAN\'T EVEN'        },
-    { label:'Diamond Paws',     top:'ME SEEING RED',     bottom:'STILL HOLDING'       },
-    { label:'Chill Energy',     top:'MARKET IS DOWN',    bottom:'CAPY DOESN\'T CARE'  },
-    { label:'This Is Fine',     top:'EVERYTHING IS FINE',bottom:'🔥🔥🔥'               },
-    { label:'HODL Mode',        top:'SOLD?',             bottom:'THE CAPY NEVER SELLS'},
+    { label:'Classic Meme',    top:'WHEN YOU',           bottom:"CAN'T EVEN"          },
+    { label:'Diamond Paws',    top:'ME SEEING RED',      bottom:'STILL HOLDING'        },
+    { label:'Chill Energy',    top:'MARKET IS DOWN',     bottom:"CAPY DOESN'T CARE"    },
+    { label:'This Is Fine',    top:'EVERYTHING IS FINE', bottom:'FIRE FIRE FIRE'        },
+    { label:'HODL Mode',       top:'SOLD?',              bottom:'THE CAPY NEVER SELLS' },
   ];
 
   function init(){
     buildSwatches('ms-text-colors',   TEXT_COLORS,   textColor,   function(c){ textColor=c; draw(); });
     buildSwatches('ms-stroke-colors', STROKE_COLORS, strokeColor, function(c){ strokeColor=c; draw(); });
     buildPresets();
-    // Auto-load the mascot image
-    var img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = function(){
-      // Convert to data URL via canvas so draw() can reuse it
-      var tmp = document.createElement('canvas');
-      tmp.width = img.width; tmp.height = img.height;
-      tmp.getContext('2d').drawImage(img, 0, 0);
-      try { src = tmp.toDataURL('image/png'); } catch(e) { src = 'assets/capy-hero.png'; }
-      locked = true;
-      buildCanvas();
-      draw();
+    buildCanvas();
+    // Load via XHR blob to avoid canvas taint
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'assets/capy-hero.png', true);
+    xhr.responseType = 'blob';
+    xhr.onload = function(){
+      var blobUrl = URL.createObjectURL(xhr.response);
+      var img = new Image();
+      img.onload = function(){ mascotImg = img; draw(); };
+      img.src = blobUrl;
     };
-    img.onerror = function(){
-      // Fallback: use the src directly (works fine when served from same origin)
-      src = 'assets/capy-hero.png';
-      locked = true;
-      buildCanvas();
-      draw();
+    xhr.onerror = function(){
+      var img = new Image();
+      img.onload = function(){ mascotImg = img; draw(); };
+      img.src = 'assets/capy-hero.png';
     };
-    img.src = 'assets/capy-hero.png';
+    xhr.send();
   }
 
   function buildSwatches(id, colors, active, cb){
@@ -1618,20 +1615,20 @@ input[type=range].ms-range::-webkit-slider-thumb {
     PRESETS.forEach(function(p){
       var d = document.createElement('div');
       d.className = 'ms-preset';
-      d.innerHTML = '<div><div class="ms-preset__name">'+p.label+'</div><div class="ms-preset__texts">▲ '+p.top+' &nbsp;▼ '+p.bottom+'</div></div><span style="color:var(--capy-green);font-size:18px;">→</span>';
+      d.innerHTML = '<div><div class="ms-preset__name">'+p.label+'</div>'
+        +'<div class="ms-preset__texts">top: '+p.top+' / bottom: '+p.bottom+'</div></div>'
+        +'<span style="color:var(--capy-green);font-size:18px;">&#8594;</span>';
       d.onclick = function(){
         document.getElementById('ms-top').value    = p.top;
         document.getElementById('ms-bottom').value = p.bottom;
         draw();
-        msTab(document.querySelector('.ms-tab'), 'ms-panel-caption');
         document.querySelectorAll('.ms-tab').forEach(function(t,i){ t.classList.toggle('active', i===0); });
-        toast('✨ Preset applied');
+        msTab(document.querySelectorAll('.ms-tab')[0], 'ms-panel-caption');
+        toast('Preset applied');
       };
       el.appendChild(d);
     });
   }
-
-  window.msHandleDrop = function(e){ e.preventDefault(); }; // no-op, upload removed
 
   function buildCanvas(){
     canvas = document.createElement('canvas');
@@ -1641,125 +1638,116 @@ input[type=range].ms-range::-webkit-slider-thumb {
   }
 
   function draw(){
-    if(!canvas || !src) return;
+    if(!canvas || !mascotImg) return;
     var ctx = canvas.getContext('2d');
-    var img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = function(){
-      var MAX = 600, w = img.width, h = img.height;
-      if(w > MAX){ h = Math.round(h*MAX/w); w = MAX; }
-      if(h > MAX){ w = Math.round(w*MAX/h); h = MAX; }
-      canvas.width = w; canvas.height = h;
-      ctx.drawImage(img, 0, 0, w, h);
-      var topTxt    = document.getElementById('ms-top').value;
-      var bottomTxt = document.getElementById('ms-bottom').value;
-      var font  = document.getElementById('ms-font').value;
-      var size  = parseInt(document.getElementById('ms-size').value);
-      var sw    = parseInt(document.getElementById('ms-stroke-w').value);
-      ctx.font      = '900 '+size+'px "'+font+'", Impact, Arial Black, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.lineJoin  = 'round';
-      function drawTxt(txt, x, y){
-        if(!txt.trim()) return;
-        var t = caps ? txt.toUpperCase() : txt;
-        if(shadow){ ctx.shadowColor='rgba(0,0,0,0.6)'; ctx.shadowBlur=8; ctx.shadowOffsetX=3; ctx.shadowOffsetY=3; }
-        if(strokeColor !== 'transparent' && sw > 0){
-          ctx.lineWidth   = sw * 2;
-          ctx.strokeStyle = strokeColor;
-          ctx.strokeText(t, x, y);
-        }
-        ctx.shadowColor = 'transparent';
-        ctx.fillStyle   = textColor;
-        ctx.fillText(t, x, y);
+    var MAX = 600;
+    var w = mascotImg.naturalWidth || mascotImg.width;
+    var h = mascotImg.naturalHeight || mascotImg.height;
+    if(w === 0 || h === 0) return;
+    if(w > MAX){ h = Math.round(h*MAX/w); w = MAX; }
+    if(h > MAX){ w = Math.round(w*MAX/h); h = MAX; }
+    canvas.width = w; canvas.height = h;
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(mascotImg, 0, 0, w, h);
+
+    var topTxt    = document.getElementById('ms-top').value;
+    var bottomTxt = document.getElementById('ms-bottom').value;
+    if(!topTxt && !bottomTxt) return;
+
+    var font = document.getElementById('ms-font').value;
+    var size = parseInt(document.getElementById('ms-size').value);
+    var sw   = parseInt(document.getElementById('ms-stroke-w').value);
+    ctx.font      = '900 '+size+'px '+font+', Impact, Arial Black, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.lineJoin  = 'round';
+
+    function drawTxt(txt, x, y){
+      if(!txt.trim()) return;
+      var t = caps ? txt.toUpperCase() : txt;
+      if(shadow){
+        ctx.shadowColor='rgba(0,0,0,0.65)'; ctx.shadowBlur=10;
+        ctx.shadowOffsetX=3; ctx.shadowOffsetY=3;
       }
-      if(topTxt)    drawTxt(topTxt,    w/2, size+10);
-      if(bottomTxt) drawTxt(bottomTxt, w/2, h-16);
-    };
-    // Cache-bust so crossOrigin header is respected even if browser cached without it
-    img.src = src + (src.indexOf('?') === -1 ? '?cb=1' : '');
+      if(strokeColor !== 'transparent' && sw > 0){
+        ctx.lineWidth   = sw * 2;
+        ctx.strokeStyle = strokeColor;
+        ctx.strokeText(t, x, y);
+      }
+      ctx.shadowColor='transparent'; ctx.shadowBlur=0;
+      ctx.shadowOffsetX=0; ctx.shadowOffsetY=0;
+      ctx.fillStyle = textColor;
+      ctx.fillText(t, x, y);
+    }
+    if(topTxt)    drawTxt(topTxt,    w/2, size+10);
+    if(bottomTxt) drawTxt(bottomTxt, w/2, h-16);
   }
 
   function getDataURL(){
+    if(!canvas) return null;
     try { return canvas.toDataURL('image/png'); }
-    catch(e){
-      // Canvas tainted fallback — redraw with fresh crossOrigin image then export
-      toast('⏳ Preparing image...');
-      return null;
-    }
+    catch(e){ toast('Must be on a web server to export'); return null; }
   }
 
-  window.msDraw  = draw;
-  window.msClear = function(){ document.getElementById('ms-top').value=''; document.getElementById('ms-bottom').value=''; draw(); };
+  function triggerDownload(url, name){
+    var a = document.createElement('a');
+    a.download = name; a.href = url; a.style.display='none';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ document.body.removeChild(a); }, 100);
+  }
+
+  window.msDraw   = draw;
+  window.msClear  = function(){ document.getElementById('ms-top').value=''; document.getElementById('ms-bottom').value=''; draw(); };
   window.msToggle = function(key, btn){
-    if(key==='caps')   { caps   = !caps;   btn.textContent = 'All Caps: '+(caps?'On':'Off');   btn.classList.toggle('on', caps); }
-    if(key==='shadow') { shadow = !shadow; btn.textContent = 'Shadow: '+(shadow?'On':'Off'); btn.classList.toggle('on', shadow); }
+    if(key==='caps')  { caps   = !caps;   btn.textContent='All Caps: '+(caps?'On':'Off');  btn.classList.toggle('on',caps);   }
+    if(key==='shadow'){ shadow = !shadow; btn.textContent='Shadow: '+(shadow?'On':'Off'); btn.classList.toggle('on',shadow); }
     draw();
   };
   window.msTab = function(clickedTab, panelId){
     document.querySelectorAll('.ms-tab').forEach(function(t){ t.classList.remove('active'); });
     clickedTab.classList.add('active');
     ['ms-panel-caption','ms-panel-style','ms-panel-presets','ms-panel-gallery'].forEach(function(id){
-      document.getElementById(id).style.display = (id === panelId) ? '' : 'none';
+      document.getElementById(id).style.display = (id===panelId) ? '' : 'none';
     });
   };
   window.msSaveGallery = function(){
-    if(!canvas) return;
-    var url = getDataURL();
-    if(!url){ toast('⚠️ Serve from a web server to enable saving'); return; }
-    var top = document.getElementById('ms-top').value;
-    var bot = document.getElementById('ms-bottom').value;
-    gallery.unshift({ url:url, top:top, bot:bot, id:Date.now() });
+    var url = getDataURL(); if(!url) return;
+    gallery.unshift({ url:url, id:Date.now() });
     if(gallery.length > 12) gallery = gallery.slice(0,12);
     renderGallery();
-    toast('🖼️ Saved to gallery');
+    toast('Saved to gallery');
   };
   window.msDownload = function(){
-    if(!canvas) return;
-    var url = getDataURL();
-    if(!url){ toast('⚠️ Serve from a web server to download'); return; }
-    var name = (document.getElementById('ms-name').value || 'capyonsol').replace(/\s+/g,'-').toLowerCase();
-    var a = document.createElement('a');
-    a.download = name + '-meme.png';
-    a.href = url;
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    // Also save to gallery
-    var top = document.getElementById('ms-top').value;
-    var bot = document.getElementById('ms-bottom').value;
-    gallery.unshift({ url:url, top:top, bot:bot, id:Date.now() });
+    var url = getDataURL(); if(!url) return;
+    var name = (document.getElementById('ms-name').value||'capyonsol').replace(/\s+/g,'-').toLowerCase()+'-meme.png';
+    triggerDownload(url, name);
+    gallery.unshift({ url:url, id:Date.now() });
     if(gallery.length > 12) gallery = gallery.slice(0,12);
     renderGallery();
-    toast('⬇️ Meme downloaded!');
+    toast('Meme downloaded!');
   };
 
   function renderGallery(){
-    var grid  = document.getElementById('ms-gallery-grid');
-    var empty = document.getElementById('ms-gallery-empty');
-    if(gallery.length === 0){ grid.style.display='none'; empty.style.display=''; return; }
-    empty.style.display = 'none'; grid.style.display = '';
-    grid.innerHTML = '';
+    var grid=document.getElementById('ms-gallery-grid');
+    var empty=document.getElementById('ms-gallery-empty');
+    if(gallery.length===0){ grid.style.display='none'; empty.style.display=''; return; }
+    empty.style.display='none'; grid.style.display='';
+    grid.innerHTML='';
     gallery.forEach(function(item){
-      var d = document.createElement('div');
-      d.className = 'ms-gal-item';
-      d.title = 'Click to download';
-      d.innerHTML = '<img src="'+item.url+'" alt="meme">';
-      d.onclick = function(){
-        var a = document.createElement('a');
-        a.download = 'capy-meme.png'; a.href = item.url; a.click();
-      };
+      var d=document.createElement('div');
+      d.className='ms-gal-item'; d.title='Click to download';
+      d.innerHTML='<img src="'+item.url+'" alt="meme">';
+      d.onclick=function(){ triggerDownload(item.url,'capy-meme.png'); };
       grid.appendChild(d);
     });
   }
 
-  var toastTimer = null;
+  var toastTimer=null;
   function toast(msg){
-    var el = document.getElementById('ms-toast');
+    var el=document.getElementById('ms-toast');
     if(!el){ el=document.createElement('div'); el.id='ms-toast'; el.className='ms-toast'; document.body.appendChild(el); }
-    el.textContent = msg; el.style.display = '';
+    el.textContent=msg; el.style.display='';
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function(){ el.style.display='none'; }, 2300);
+    toastTimer=setTimeout(function(){ el.style.display='none'; },2500);
   }
 
   document.addEventListener('DOMContentLoaded', init);
