@@ -1720,9 +1720,6 @@ input[type=range].ms-range::-webkit-slider-thumb {
     var url = getDataURL(); if(!url) return;
     var name = (document.getElementById('ms-name').value||'capyonsol').replace(/\s+/g,'-').toLowerCase()+'-meme.png';
     triggerDownload(url, name);
-    gallery.unshift({ url:url, id:Date.now() });
-    if(gallery.length > 12) gallery = gallery.slice(0,12);
-    renderGallery();
     toast('Meme downloaded!');
   };
 
